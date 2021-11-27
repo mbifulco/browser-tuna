@@ -1,61 +1,36 @@
-# Welcome to Remix!
+# :cana
 
-- [Remix Docs](https://remix.run/docs)
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Netlify Setup
+## Getting Started
 
-1. Install the [Netlify CLI](https://www.netlify.com/products/dev/):
+First, run the development server:
 
-```sh
-npm i -g netlify-cli
+```bash
+npm run dev
+# or
+yarn dev
 ```
 
-2. Sign up and log in to Netlify:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```sh
-  netlify login
-```
+You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-3. Create a new site:
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-```sh
-  netlify init
-```
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-4. You'll need to tell Netlify to use Node 14, as at the time of writing Netlify uses Node 12 by [default](https://docs.netlify.com/functions/build-with-javascript/#runtime-settings)
+## Learn More
 
-```sh
-  netlify env:set AWS_LAMBDA_JS_RUNTIME nodejs14.x
-```
+To learn more about Next.js, take a look at the following resources:
 
-## Development
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You will be running two processes during development when using Netlify as your server.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-- Your Netlify server in one
-- The Remix development server in another
+## Deploy on Vercel
 
-```sh
-# in one tab
-$ npm run dev:netlify
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-# in another
-$ npm run dev
-```
-
-Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
-
-If you'd rather run everything in a single tab, you can look at [concurrently](https://npm.im/concurrently) or similar tools to run both processes in one tab.
-
-## Deployment
-
-There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
-
-```sh
-$ npm run build
-# preview deployment
-$ netlify deploy
-
-# production deployment
-$ netlify deploy --prod
-```
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
