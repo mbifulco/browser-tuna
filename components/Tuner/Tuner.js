@@ -46,8 +46,6 @@ const Tuner = () => {
       FFT_SIZE,
     );
 
-    console.log('note', note, frequency);
-
     for (let i = 0; i < sampleCount; i++) {
       const barHeight = frequencyDataRef.current[i] * canvasH;
       ctx.fillStyle = 'rgb(' + (barHeight + 100) + ',50 ,125)'; // fillStyle =  '#ee60ac';
