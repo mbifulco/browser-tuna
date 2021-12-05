@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import AudioInputManager from '../../lib/AudioInputManager';
 import MicrophoneManager from '../../lib/MicrophoneManager';
 
 import { analyzeFrequencyData } from '../../lib/NoteAnalysis';
 
 import { Button, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 
-const FFT_SIZE = 2048;
+const FFT_SIZE = Math.pow(2, 11);
 
 const Tuner = () => {
   const [selectedDeviceId, setSelectedDeviceId] = useState();
+
+  // store the last heard note in state
+  const [lastHeardNote, setLastHeardNote] = useState();
 
   const canvasRef = useRef();
   const frequencyDataRef = useRef();
@@ -24,12 +26,8 @@ const Tuner = () => {
   const height = 350;
 
   const draw = (ctx) => {
-    const sampleCount = microphoneManager.analyzer.frequencyBinCount;
-
     const canvasW = canvasRef.current.width;
     const canvasH = canvasRef.current.height;
-
-    const barWidth = (canvasW * 1.0) / sampleCount;
 
     ctx.clearRect(0, 0, canvasW, canvasH);
 
@@ -44,9 +42,36 @@ const Tuner = () => {
     const { frequencyIndex, note, frequency } = analyzeFrequencyData(
       frequencyDataRef.current,
       FFT_SIZE,
+      microphoneManager.audioContext.sampleRate,
     );
 
-    for (let i = 0; i < sampleCount; i++) {
+    if (note.name) {
+      setLastHeardNote({
+        ...note,
+        frequency,
+      });
+    }
+
+    const highPassThreshold = 1200; // in hz, the highest frequency we want to display
+
+    // this is effectively used for a lowpass filter on the data we get back from the FFT
+    // we're calculating the bucket index for the highest frequency data we care about
+    // based on the given instrument.
+
+    /* 
+      for GUITAR: 
+        - max 1200 hz
+        - source: http://recordingology.com/in-the-studio/guitars/#:~:text=The%20fundamental%20frequencies%20in%20the,1200%20Hz%20(Figure%203.8).
+    */
+    const maxFrequencyBucket =
+      Math.round(
+        highPassThreshold /
+          (microphoneManager.audioContext.sampleRate / 2 / FFT_SIZE),
+      ) + 1;
+
+    const barWidth = (canvasW * 1.0) / maxFrequencyBucket;
+
+    for (let i = 0; i < maxFrequencyBucket; i++) {
       const barHeight = frequencyDataRef.current[i] * canvasH;
       ctx.fillStyle = 'rgb(' + (barHeight + 100) + ',50 ,125)'; // fillStyle =  '#ee60ac';
 
@@ -82,6 +107,10 @@ const Tuner = () => {
 
   return (
     <Stack>
+      <h1 style={{ textAlign: 'center', fontWeight: 'bold' }}>
+        The last note I heard was... {lastHeardNote && lastHeardNote.name}:{' '}
+        {lastHeardNote && Math.round(lastHeardNote.frequency)}
+      </h1>
       <canvas ref={canvasRef} width={width} height={height} />
       {/* {frequencyData} */}
 
