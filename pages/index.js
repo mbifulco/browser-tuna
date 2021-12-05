@@ -13,8 +13,12 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Choona</title>
-        <meta name="description" content="Browser-based tuner" />
+        <title>Guithub: Online guitar tuner.</title>
+        <meta
+          name="description"
+          content="Online instrument tuner for guitar, mandolin, ukulele, banjo and other instruments. Play your favorite songs better when you tune your instrument first."
+          canonical="https://guithub.org"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -24,7 +28,7 @@ const Home = () => {
 
       <footer className={styles.footer}>
         <a href="https://mikebifulco.com">
-          {"It's"} a choona 🐡 project from Mike Bifulco
+          {"It's"} a choona 🐡 weekend project from Mike Bifulco
         </a>
       </footer>
     </div>
