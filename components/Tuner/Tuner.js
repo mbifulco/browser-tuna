@@ -2,32 +2,34 @@ import { useEffect, useRef, useState } from 'react';
 import AudioInputManager from '../../lib/AudioInputManager';
 import MicrophoneManager from '../../lib/MicrophoneManager';
 
+import { analyzeFrequencyData } from '../../lib/NoteAnalysis';
+
 import { Button, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 
-const FFT_SIZE = 512;
+const FFT_SIZE = 2048;
 
 const Tuner = () => {
   const [selectedDeviceId, setSelectedDeviceId] = useState();
 
   const canvasRef = useRef();
   const frequencyDataRef = useRef();
-  const timeDomainDataRef = useRef();
+  // const timeDomainDataRef = useRef();
 
   // store microphone manager in state
   const [microphoneManager, setMicrophoneManager] = useState(
     () => new MicrophoneManager(FFT_SIZE),
   );
 
-  const width = 800;
-  const height = 200;
+  const width = 1500;
+  const height = 350;
 
   const draw = (ctx) => {
-    const sampleCount = FFT_SIZE / 2;
+    const sampleCount = microphoneManager.analyzer.frequencyBinCount;
 
     const canvasW = canvasRef.current.width;
     const canvasH = canvasRef.current.height;
 
-    const barWidth = (canvasW * 1.0) / sampleCount; // * 2.5;
+    const barWidth = (canvasW * 1.0) / sampleCount;
 
     ctx.clearRect(0, 0, canvasW, canvasH);
 
@@ -39,11 +41,21 @@ const Tuner = () => {
 
     let x = 0;
 
-    console.log(timeDomainDataRef.current, 1);
+    const { frequencyIndex, note, frequency } = analyzeFrequencyData(
+      frequencyDataRef.current,
+      FFT_SIZE,
+    );
+
+    console.log('note', note, frequency);
 
     for (let i = 0; i < sampleCount; i++) {
-      const barHeight = timeDomainDataRef.current[i] * canvasH;
-      ctx.fillStyle = '#ee60ac';
+      const barHeight = frequencyDataRef.current[i] * canvasH;
+      ctx.fillStyle = 'rgb(' + (barHeight + 100) + ',50 ,125)'; // fillStyle =  '#ee60ac';
+
+      if (i === frequencyIndex) {
+        ctx.fillStyle = '#00ff00';
+        ctx.shadowBlur = 10;
+      }
       ctx.fillRect(x, canvasH - barHeight / 2, barWidth, barHeight / 2);
 
       x += barWidth;
@@ -53,13 +65,12 @@ const Tuner = () => {
   const monitorMicrophone = () => {
     if (microphoneManager.initialized) {
       frequencyDataRef.current = microphoneManager.getFrequencyData();
-      timeDomainDataRef.current = microphoneManager.getTimeDomainData();
+      // timeDomainDataRef.current = microphoneManager.getTimeDomainData();
 
       const canvas = canvasRef.current;
       const context = canvas.getContext('2d');
 
-      if (timeDomainDataRef.current) {
-        console.log('drawing');
+      if (frequencyDataRef.current || timeDomainDataRef.current) {
         draw(context);
       }
     }
