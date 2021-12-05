@@ -5,7 +5,7 @@ import { analyzeFrequencyData } from '../../lib/NoteAnalysis';
 
 import { Button, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 
-const FFT_SIZE = Math.pow(2, 11);
+const FFT_SIZE = Math.pow(2, 12);
 
 const Tuner = () => {
   const [selectedDeviceId, setSelectedDeviceId] = useState();
