@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Choona</title>
         <meta name="description" content="Browser-based tuner" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
