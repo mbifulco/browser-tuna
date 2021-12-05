@@ -23,7 +23,9 @@ const Home = () => {
       </main>
 
       <footer className={styles.footer}>
-        <a>{"It's"} a choona 🐡</a>
+        <a href="https://mikebifulco.com">
+          {"It's"} a choona 🐡 project from Mike Bifulco
+        </a>
       </footer>
     </div>
   );
